@@ -1,0 +1,56 @@
+
+
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link rel="stylesheet" href="style.css">
+        </head>
+    <body>
+
+        <h1>Connexion</h1>
+        <h4> Vous n'avez pas encore de compte ? <a href="creation_compte.php"><span class="sign">Sign up for free</span> </a></h4>
+
+        <form id="form_compte" action="verf_compte.php" method="POST">
+            <input type="email" name="c_mail" placeholder="Email" required><br>
+            <input type="password" name="c_password" placeholder="Mot de passe" required><br>
+            <input type="submit" value="Se connecter">
+            
+        </form>
+        <a id="password" href="verf_pass.php">Mot de passe oubliée ? </a>
+        
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<?php
+        include 'config.php';
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $mail = $_POST['c_mail'];
+            $password = $_POST['c_password'];
+
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email AND pass = :pass");
+            $stmt->execute([
+                ':email' => $mail,
+                ':pass' => $password
+            ]);
+
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($user) {
+                echo "Connexion réussie";
+            } else {
+                echo "Email ou mot de passe incorrect";
+            }
+        }
+?>
